@@ -45,7 +45,13 @@ function fish_prompt
     set Time (date +%T)
     set PathShort (pwd|sed "s=$HOME=~=")
 
-    set PROMPT_START "$White$Time$ResetColor:$WHOAMI@$HOSTNAME:"
+    set VIRTUAL_PROMPT ""
+    if [ -n "$VIRTUAL_ENV" ]
+        set VIRTUAL_BASENAME (basename $VIRTUAL_ENV)
+        set VIRTUAL_PROMPT "$Yellow($VIRTUAL_BASENAME)$ResetColor"
+    end
+
+    set PROMPT_START "$VIRTUAL_PROMPT$White$Time$ResetColor:$WHOAMI@$HOSTNAME:"
     set PROMPT_END "$Yellow$PathShort$ResetColor"
     set PROMPT_SEP "\$"
 
