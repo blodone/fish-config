@@ -1,2 +1,3 @@
 Requirements:
-git clone git@github.com:magicmonty/bash-git-prompt.git
+git clone https://github.com/magicmonty/bash-git-prompt.git
+pip install virtualfish
