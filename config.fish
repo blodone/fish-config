@@ -201,3 +201,5 @@ function virtualfish_project_go --on-event virtualenv_did_activate
 	end
 end
 
+rvm default
+
