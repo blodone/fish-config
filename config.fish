@@ -202,4 +202,7 @@ function virtualfish_project_go --on-event virtualenv_did_activate
 end
 
 rvm default
+set -g -x PATH $PATH ~/bin ~/.local/bin ~/.rbenv/bin: ~/.rbenv/plugins/ruby-build/bin:
+pyenv init - | source
+rbenv init - | source
 
