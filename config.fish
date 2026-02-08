@@ -1,4 +1,4 @@
-eval (python -m virtualfish compat_aliases auto_activation global_requirements)
+#eval (python3 -m virtualfish compat_aliases auto_activation global_requirements)
 
 if not set -q __GIT_PROMPT_DIR
     set __GIT_PROMPT_DIR ~/bash-git-prompt
@@ -195,10 +195,13 @@ end
 
 
 function virtualfish_project_go --on-event virtualenv_did_activate
-	set PROJECT_FILE $VIRTUAL_ENV/.project
-	if test -e $PROJECT_FILE
-		cd (cat $PROJECT_FILE)
-	end
+        set PROJECT_FILE $VIRTUAL_ENV/.project
+        if test -e $PROJECT_FILE
+                cd (cat $PROJECT_FILE)
+        end
+        if set -q VIRTUAL_ENV
+            set -gx UV_PROJECT_ENVIRONMENT $VIRTUAL_ENV
+        end
 end
 
 rvm default
