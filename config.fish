@@ -204,6 +204,33 @@ function virtualfish_project_go --on-event virtualenv_did_activate
         end
 end
 
+
+set -gx PATH $PATH ~/bin ~/.local/bin
+
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+end
+# ~/.config/fish/functions/gitpullall.fish
+
+function gitpullall --description "Git pull in allen Repos rekursiv (parallel)"
+    set -l dir .
+    if test (count $argv) -gt 0
+        set dir $argv[1]
+    end
+
+    find $dir -name ".git" -type d -printf '%h\n' | while read -l repo
+        fish -c "
+            echo '=== $repo ==='
+            if git -C '$repo' pull 2>&1
+                set_color green; echo '✓ OK'; set_color normal
+            else
+                set_color red; echo '✗ FEHLER'; set_color normal
+            end
+        " &
+    end
+    wait
+end
+
 rvm default
 set -g -x PATH $PATH ~/bin ~/.local/bin ~/.rbenv/bin: ~/.rbenv/plugins/ruby-build/bin:
 pyenv init - | source
