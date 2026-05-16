@@ -212,23 +212,21 @@ if status is-interactive
 end
 # ~/.config/fish/functions/gitpullall.fish
 
-function gitpullall --description "Git pull in allen Repos rekursiv (parallel)"
+function gitpullall --description "Git pull in allen Repos rekursiv (parallel, gepuffert)"
     set -l dir .
     if test (count $argv) -gt 0
         set dir $argv[1]
     end
 
-    find $dir -name ".git" -type d -printf '%h\n' | while read -l repo
-        fish -c "
-            echo '=== $repo ==='
-            if git -C '$repo' pull 2>&1
-                set_color green; echo '✓ OK'; set_color normal
+    find $dir -name ".git" -type d -printf '%h\n' \
+        | xargs -P 8 -I {} bash -c '
+            output=$(git -C {} pull 2>&1)
+            if [ $? -eq 0 ]; then
+                printf "=== {} ===\n✓ %s\n\n" "$output"
             else
-                set_color red; echo '✗ FEHLER'; set_color normal
-            end
-        " &
-    end
-    wait
+                printf "=== {} ===\n✗ %s\n\n" "$output"
+            fi
+        '
 end
 
 rvm default
