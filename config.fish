@@ -229,6 +229,20 @@ function gitpullall --description "Git pull in allen Repos rekursiv (parallel, g
         '
 end
 
+set -gx NVM_DIR $HOME/.nvm
+
+if test -s $NVM_DIR/alias/default
+    set -l __nvm_default (string trim < $NVM_DIR/alias/default)
+    set -l __nvm_bin $NVM_DIR/versions/node/v$__nvm_default/bin
+    test -d $__nvm_bin; and set -gx PATH $__nvm_bin $PATH
+end
+
+# nvm ist ein bash Skript, daher Delegation; `nvm use` wirkt nur in der Subshell
+function nvm --description "nvm via bash"
+    bash -c "source $NVM_DIR/nvm.sh --no-use; nvm $argv"
+end
+
+
 rvm default
 set -g -x PATH $PATH ~/bin ~/.local/bin ~/.rbenv/bin: ~/.rbenv/plugins/ruby-build/bin:
 pyenv init - | source
